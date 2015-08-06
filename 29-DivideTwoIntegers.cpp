@@ -17,8 +17,7 @@ public:
         int result = 1;
         while (uDivisor * 10 < uDivident) {
             uDivisor *= 10;
-            result *= 10;
-        }
+            result *= 10;}
         uDivident -= uDivisor;
         return result;
     }
