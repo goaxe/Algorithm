@@ -1,6 +1,6 @@
 /*=============================================================================
 #     FileName: 32-LongestValidParentheses.cpp
-#         Desc: 
+#         Desc: AC, 8ms
 #       Author: Jian Huang
 #        Email: huangjian1993@gmail.com
 #     HomePage: https://cn.linkedin.com/in/huangjian1993
@@ -14,6 +14,67 @@
 class Solution {
     public:
         int longestValidParentheses(string s) {
+            if (s == "") {
+                return 0;
+            }
+            int len = s.length(), result = 0;
+            vector<int> dp(len, 0);
+            for (int i = len - 2; i >= 0; i --) {
+                if (s[i] == ')') {
+                    dp[i] = 0;
+                } else {
+                    int j =  i + 1 + dp[i + 1];
+                    if (j < len && s[j] == ')') {
+                        dp[i] = dp[i + 1] + 2;
+                        if (j + 1 < len) {
+                            dp[i] += dp[j + 1];
+                        }
+                    }
+                }
+                result = max(result, dp[i]);
+            }
+            return result;
+        }
+
+
+        //AC, 16ms
+        int longestValidParenthesesII(string s) {
+            if (s == "") {
+                return 0;
+            }
+            int len = s.length(), result = 0, start = 0, end;
+            vector<bool> visited(len, false);
+            stack<int> indexs;
+            for (int i = 0; i < len; i ++) {
+                if (s[i] == '(') {
+                    indexs.push(i);
+                } else {
+                    if (!indexs.empty()) {
+                        visited[i] = true;
+                        visited[indexs.top()] = true;
+                        indexs.pop();
+                    }
+                }
+            }
+            while (start < len) {
+                while (start < len && !visited[start]) {
+                    start ++;
+                }
+                if (start >= len) {
+                    break;
+                }
+                end = start;
+                while (end + 1 < len && visited[end + 1]) {
+                    end ++;
+                }
+                result = max(end - start + 1, result);
+                start = end + 1;
+            }
+            cout << "result: " << result << endl;
+            return result;
+        }
+        //TLE
+        int longestValidParenthesesI(string s) {
             if (s == "") {
                 return 0;
             }
@@ -60,6 +121,6 @@ class Solution {
 
 int main() {
     Solution solution;
-    cout << solution.longestValidParentheses(")()())") << endl;
+    cout << solution.longestValidParentheses("()()") << endl;
     return 0;
 }
