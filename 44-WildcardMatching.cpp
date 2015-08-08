@@ -1,6 +1,6 @@
 /*=============================================================================
 #     FileName: 44-WildcardMatching.cpp
-#         Desc: 
+#         Desc: AC, 16ms
 #       Author: Jian Huang
 #        Email: huangjian1993@gmail.com
 #     HomePage: https://cn.linkedin.com/in/huangjian1993
@@ -13,8 +13,41 @@
 
 class Solution {
     public:
-        //MLE
+        bool isMatch(string s, int index1, string p, int index2) {
+            int len1 = s.length(), len2 = p.length(), star = -1, prevS = -1;
+            while (index1 < len1) { //don't need to check index2
+                char c1 = s[index1], c2 = p[index2];
+                if (c1 == c2 || c2 == '?') {
+                    index1 ++;
+                    index2 ++;
+                } else if (c2 == '*') {
+                    star = index2;
+                    prevS = index1;
+                    index2 ++;
+                } else {
+                    if (star == -1) {
+                        return false;
+                    }
+                    index2 = star + 1;
+                    index1 = ++prevS;
+                }
+            }
+            if (len2 == index2) {
+                return len1 == index1;
+            }
+            if (len1 == index1) {
+                while (index2 < len2 && p[index2] == '*') {
+                    index2 ++;
+                }
+                return index2 == len2;
+            }
+            return false;
+        }
         bool isMatch(string s, string p) {
+            return isMatch(s, 0, p, 0);
+        }
+        //MLE
+        bool isMatchI(string s, string p) {
             if (p == "") {
                 return s == "";
             }
@@ -39,13 +72,8 @@ class Solution {
                         dp[i][j] = true;
                         continue;
                     }
-                    if (p[j - 1] == '*') {
-                        for (int k = 0; k <= i; k ++) {
-                            if (dp[k][j - 1]) {
-                                dp[i][j] = true;
-                                break;
-                            }
-                        }
+                    if (p[j - 1] == '*' && (dp[i][j - 1] || dp[i - 1][j])) { //don't need a cycle
+                        dp[i][j] = true;
                     }
                 }
             }
