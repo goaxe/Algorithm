@@ -38,11 +38,9 @@ class Solution {
 };
 
 int main() {
-    int nums[] = {5, 4, 1, 2};
-    vector<int> height;
-    for (int i = 0; i < 4; i ++) {
-        height.push_back(nums[i]);
-    }
+    int nums[] = {0};
+    vector<int> height = array2Vector(nums);
+
     Solution solution;
     cout << solution.largestRectangleArea(height) << endl;
 
