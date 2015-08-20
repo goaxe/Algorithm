@@ -29,7 +29,7 @@ class Solution {
                 vector<TreeNode *> leftNodes = generateRecurse(nums, low, i - 1), rightNodes = generateRecurse(nums, i + 1, high);
                 for (int j = 0; j < (int)leftNodes.size(); j ++) {
                     for (int k = 0; k < (int)rightNodes.size(); k ++) {
-                        TreeNode *root = new TreeNode(nums[i]);
+                        TreeNode *root = new TreeNode(nums[i]); //this is very important, push_back copy the pointer, not the content...
                         root->left = leftNodes[j];
                         root->right = rightNodes[k];
                         result.push_back(root);

@@ -1,6 +1,6 @@
 /*=============================================================================
 #     FileName: 99-RecoverBinarySearchTree.cpp
-#         Desc: 
+#         Desc: AC, 56ms
 #       Author: Jian Huang
 #        Email: huangjian1993@gmail.com
 #     HomePage: https://cn.linkedin.com/in/huangjian1993
@@ -19,32 +19,30 @@ struct TreeNode {
 };
 
 class Solution {
-    private:
-        TreeNode *first, *second;
     public:
-        bool isValidBST(TreeNode *root, int minVal, int maxVal) {
+        void travelInOrder(TreeNode *root, vector<TreeNode *> &result) {
             if (!root) {
-                return true;
+                return ;
             }
-            int val = root->val;
-            if (val > maxVal || val < minVal) {
-                if (first) {
-                    second = root;
-                } else {
-                    first = root;
-                }
-                return false;
-            }
-            if ((root->left && root->left->val >= val) || (root->right && root->right->val <= val)) {
-                return false;
-            }
-            return isValidBST(root->left, minVal, val - 1) && isValidBST(root->right, val + 1, maxVal);
+            travelInOrder(root->left, result);
+            result.push_back(root);
+            travelInOrder(root->right, result);
         }
 
         void recoverTree(TreeNode* root) {
-            first = NULL;
-            second = NULL;
-            isValidBST(root, INT_MIN, INT_MAX);
+            vector<TreeNode *> nodes;
+            travelInOrder(root, nodes);
+            TreeNode *first = NULL, *second = NULL;
+            for (int i = 1; i < (int) nodes.size(); i ++) {
+                if (nodes[i]->val < nodes[i - 1]->val) {
+                    if (!first) {
+                        first = nodes[i - 1];
+                        second = nodes[i];
+                    } else {
+                        second = nodes[i];
+                    }
+                }
+            }
             int tmp = first->val;
             first->val = second->val;
             second->val = tmp;
