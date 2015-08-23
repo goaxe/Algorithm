@@ -1,6 +1,6 @@
 /*=============================================================================
 #     FileName: 114-FlattenBinaryTreeToLinkedList.cpp
-#         Desc: 
+#         Desc: AC, 8ms
 #       Author: Jian Huang
 #        Email: huangjian1993@gmail.com
 #     HomePage: https://cn.linkedin.com/in/huangjian1993
@@ -20,28 +20,22 @@ struct TreeNode {
 
 class Solution {
     public:
-        TreeNode *flattenRecurse(TreeNode *root) {
-            if (!root) {
-                return NULL;
-            }
-            if (!root->left && !root->right) {
-                return root;
-            }
-            TreeNode *left = flattenRecurse(root->left);
-            TreeNode *right = flattenRecurse(root->right);
-            root->right = left;
-            left = root;
-            while (left->right) {
-                left = left->right;
-            }
-            left->right = right;
-            return root;
-        }
         void flatten(TreeNode* root) {
             if (!root) {
                 return ;
             }
-            flattenRecurse(root);
+            while (root) {
+                if (root->left) {
+                    TreeNode *prev = root->left;
+                    while (prev->right) {
+                        prev = prev->right;
+                    }
+                    prev->right = root->right;
+                    root->right = root->left;
+                    root->left = NULL;
+                }
+                root = root->right;
+            }
         }
 };
 
