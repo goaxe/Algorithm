@@ -1,6 +1,6 @@
 /*=============================================================================
 #     FileName: 120-Triangle.cpp
-#         Desc: 
+#         Desc: AC, 8ms
 #       Author: Jian Huang
 #        Email: huangjian1993@gmail.com
 #     HomePage: https://cn.linkedin.com/in/huangjian1993
